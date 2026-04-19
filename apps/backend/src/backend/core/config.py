@@ -20,7 +20,7 @@ class AppConfig(CustomBaseSettings):
     """FastAPI app metadata settings."""
 
     APP_NAME: str = "FastAPI backend app"
-    LICENCE_NAME: str = "MIT"
+    LICENSE_NAME: str = "MIT"
     CONTACT_NAME: str | None = None
     CONTACT_EMAIL: EmailStr | None = None
     ENVIRONMENT: Environment = Environment.DEVELOPMENT
@@ -44,7 +44,7 @@ class AppConfig(CustomBaseSettings):
             "version": self.VERSION,
             "description": self.DESCRIPTION,
             "contact": {"name": self.CONTACT_NAME, "email": self.CONTACT_EMAIL},
-            "licence_info": {"name": self.LICENCE_NAME},
+            "license_info": {"name": self.LICENSE_NAME},
             "debug": self.DEBUG,
             "swagger_ui_parameters": {
                 "persistAuthorization": self.DEBUG,
@@ -69,4 +69,4 @@ class GlobalConfig(CustomBaseSettings):
 
 
 configs = GlobalConfig()
-configs = GlobalConfig()
+

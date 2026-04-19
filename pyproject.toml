@@ -22,6 +22,6 @@ members = [
     "libs/*",
 ]
 
-# Avoids treating same-named tests files as a single module accross packages
+# Avoids treating same-named tests files as a single module across packages
 [tool.pytest.ini_options]
 addopts = "--import-mode=importlib"
