@@ -1,0 +1,27 @@
+[project]
+name = "fastapi-monorepo-workspace"
+version = "0.1.0"
+requires-python = ">=3.13,<3.14"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.11",
+    "ty>=0.0.31",
+]
+test = [
+    "pytest>=9.0.3",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = [
+    "apps/*",
+    "libs/*",
+]
+
+# Avoids treating same-named tests files as a single module across packages
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
