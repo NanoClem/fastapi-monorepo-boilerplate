@@ -5,3 +5,4 @@ class Environment(StrEnum):
     PRODUCTION = "production"
     DEVELOPMENT = "development"
     # add more as needed
+
