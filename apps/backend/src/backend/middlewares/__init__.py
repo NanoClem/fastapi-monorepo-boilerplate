@@ -1,10 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from ..core.config import MiddlewareConfig
+from .config import MiddlewareConfig, middleware_config
+from .log import LoggingMiddleware
 
 
-def setup_middlewares(app: FastAPI, configs: MiddlewareConfig) -> None:
+def setup_middlewares(
+    app: FastAPI, configs: MiddlewareConfig = middleware_config
+) -> None:
+    # Logging
+    app.add_middleware(LoggingMiddleware)
 
     # CORS
     app.add_middleware(

@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Any
 
 from backend import __description__, __version__
-from pydantic import EmailStr, Field
+from pydantic import EmailStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from .types import Environment
@@ -52,21 +52,4 @@ class AppConfig(CustomBaseSettings):
         }
 
 
-class MiddlewareConfig(CustomBaseSettings):
-    """Settings to be injected in middlewares at app configuration."""
-
-    CORS_ALLOW_METHODS: list[str] = ["*"]
-    CORS_ALLOW_HEADERS: list[str] = ["*"]
-    CORS_ALLOW_ORIGINS: list[str] = Field(default_factory=list[str])
-    CORS_ALLOW_ORIGIN_REGEX: str | None = None
-
-
-class GlobalConfig(CustomBaseSettings):
-    """Global app settings."""
-
-    app: AppConfig = AppConfig()
-    middleware: MiddlewareConfig = MiddlewareConfig()
-
-
-configs = GlobalConfig()
-
+app_config = AppConfig()
