@@ -1,0 +1,10 @@
+services:
+  backend:
+    image: fastapi-monolith/backend:latest
+    container_name: backend-dev
+    user: root
+    ports:
+      - "8000:8000"
+    environment:
+      ENVIRONMENT: development
+      UV_NO_DEV: 0 # include development dependencies when working locally

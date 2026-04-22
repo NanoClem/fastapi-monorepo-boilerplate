@@ -1,0 +1,21 @@
+# Docker
+Dockerfile
+docker-compose*.yml
+
+# Python
+.venv
+**/tests
+**/.ruff_cache
+**/.pytest_cache
+**/__pycache__
+
+# Git
+.git
+.gitignore
+
+# Miscallaneous
+**/!.env
+**/*.env
+**/logs
+README.md
+LICENSE
