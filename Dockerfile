@@ -1,4 +1,7 @@
-FROM ghcr.io/astral-sh/uv:0.11.7-python3.13-trixie-slim AS builder
+ARG PYTHON_VERSION=3.13
+ARG UV_VERSION=0.11.7
+
+FROM ghcr.io/astral-sh/uv:${UV_VERSION}-python${PYTHON_VERSION}-trixie-slim AS builder
 
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
@@ -21,7 +24,7 @@ COPY . .
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --package=backend
 
-FROM python:3.13-slim-trixie
+FROM python:${PYTHON_VERSION}-slim-trixie
 # It is important to use the image that matches the builder, as the path to the
 # Python executable must be the same, e.g., using `python:3.11-slim-bookworm`
 # will fail.
