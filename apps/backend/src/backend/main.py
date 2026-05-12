@@ -4,11 +4,11 @@ from typing import AsyncGenerator
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
-from .api import router as api_router
 from .core.config import AppConfig, app_config
 from .core.types import Environment
 from .logging import setup_logging
 from .middlewares import setup_middlewares
+from .routes import router as api_router
 
 
 @asynccontextmanager
