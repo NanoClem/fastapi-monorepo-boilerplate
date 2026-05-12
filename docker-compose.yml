@@ -1,0 +1,30 @@
+name: fastapi-monorepo
+
+x-restart-policy: &restart_policy
+  restart: unless-stopped
+
+networks:
+  backend:
+    driver: bridge
+    name: backend_network
+
+services:
+  backend:
+    <<: *restart_policy
+    build:
+      context: .
+      args:
+        PORT: ${BACKEND_PORT:-8000}
+    image: fastapi-monorepo/backend:latest
+    container_name: backend
+    hostname: backend
+    env_file:
+      - ./apps/backend/.env
+    healthcheck:
+      test: "curl -f http://localhost:$PORT/healthcheck || exit 1"
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
+    networks:
+      - backend

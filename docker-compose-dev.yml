@@ -1,0 +1,16 @@
+services:
+  backend:
+    build:
+      args:
+        PORT: 8000
+        UV_NO_DEV: 0 # include development dependencies when working locally=value
+    command: ["--reload"]
+    image: fastapi-monorepo/backend:latest
+    container_name: backend-dev
+    user: root
+    ports:
+      - "8000:8000"
+    environment:
+      ENVIRONMENT: development
+    volumes:
+      - ./apps/backend/src:/workspace/apps/backend/src

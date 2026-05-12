@@ -37,10 +37,11 @@ class LoggingMiddleware(BaseHTTPMiddleware):
 
         res_body = [chunk async for chunk in response.body_iterator]  # ty:ignore[unresolved-attribute]
         response.body_iterator = iterate_in_threadpool(iter(res_body))  # ty:ignore[unresolved-attribute]
-        res_body = res_body[0].decode()
+
+        body = res_body[0].decode() if res_body else ""
 
         if response.headers.get("Content-Type") == "application/json":
-            res_body = json.loads(res_body)
+            body = json.loads(body)
 
         logger.info(
             "Request completed",
@@ -50,7 +51,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                 "status_code": response.status_code,
                 "method": request.method,
                 "path": request.url.path,
-                "body": res_body,
+                "body": body,
                 "duration_ms": duration_ms,
             },
         )
