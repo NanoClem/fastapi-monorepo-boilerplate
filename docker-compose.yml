@@ -21,7 +21,7 @@ services:
     env_file:
       - ./apps/backend/.env
     healthcheck:
-      test: "curl -f http://localhost:$PORT/healthcheck || exit 1"
+      test: "curl -f http://localhost:$$PORT/health || exit 1" # escape $$PORT to reference it at runtime
       interval: 30s
       timeout: 10s
       retries: 5
