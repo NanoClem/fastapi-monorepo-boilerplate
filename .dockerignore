@@ -13,9 +13,8 @@ docker-compose*.yml
 .git
 .gitignore
 
-# Miscallaneous
-**/!.env
-**/*.env
+# Miscellaneous
+!**/.env
 **/logs
 README.md
 LICENSE
