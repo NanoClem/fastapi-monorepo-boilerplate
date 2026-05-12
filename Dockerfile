@@ -3,9 +3,11 @@ ARG UV_VERSION=0.11.7
 
 FROM ghcr.io/astral-sh/uv:${UV_VERSION}-python${PYTHON_VERSION}-trixie-slim AS builder
 
+ARG UV_NO_DEV=1
+
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
-    UV_NO_DEV=1 \
+    UV_NO_DEV=${UV_NO_DEV} \
     UV_PYTHON_DOWNLOADS=0
 
 WORKDIR /workspace
@@ -37,9 +39,14 @@ RUN groupadd --system --gid 999 nonroot \
  && useradd --system --gid 999 --uid 999 --create-home nonroot
 
 # Add curl for health checks
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder --chown=nonroot:nonroot /workspace /workspace
+
+COPY --chown=nonroot:nonroot ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Activate virtual environment by default when the container starts
 ENV PATH="/workspace/.venv/bin:$PATH"
@@ -50,4 +57,4 @@ WORKDIR /workspace
 
 EXPOSE $PORT
 
-CMD ["sh", "-c", "fastapi run --host 0.0.0.0 --port $PORT apps/backend/src/backend/main.py"]
+ENTRYPOINT ["docker-entrypoint.sh"]

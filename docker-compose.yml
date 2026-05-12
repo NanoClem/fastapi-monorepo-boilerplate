@@ -14,16 +14,14 @@ services:
     build:
       context: .
       args:
-        BACKEND_PORT: ${BACKEND_PORT:-8000}
+        PORT: ${BACKEND_PORT:-8000}
     image: fastapi-monorepo/backend:latest
     container_name: backend
     hostname: backend
-    expose:
-      - ${BACKEND_PORT:-8000}
     env_file:
       - ./apps/backend/.env
     healthcheck:
-      test: "curl -f http://localhost:${BACKEND_PORT:-8000}/healthcheck || exit 1"
+      test: "curl -f http://localhost:$PORT/healthcheck || exit 1"
       interval: 30s
       timeout: 10s
       retries: 5
