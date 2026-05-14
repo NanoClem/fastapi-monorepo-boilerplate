@@ -5,9 +5,10 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
 from .core.config import AppConfig, app_config
+from .core.exceptions import register_exception_handlers
 from .core.types import Environment
 from .logging import setup_logging
-from .middlewares import setup_middlewares
+from .middlewares import register_middlewares
 from .routes import router as api_router
 
 
@@ -41,7 +42,9 @@ def create_app(configs: AppConfig, **kwargs) -> FastAPI:
     app = FastAPI(lifespan=lifespan, **kwargs)
     app.include_router(api_router)
 
-    setup_middlewares(app)
+    # Register core components
+    register_middlewares(app)
+    register_exception_handlers(app)
 
     if environment != Environment.PRODUCTION:
 
