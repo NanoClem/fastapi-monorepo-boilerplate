@@ -1,3 +1,6 @@
+import logging
+import traceback
+
 from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -6,8 +9,21 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from ..types import ErrorCode
 from .customs import AppException
 
+logger = logging.getLogger("app_logger")
+
 
 async def app_exception_handler(request: Request, exc: AppException) -> JSONResponse:
+    logger.warning(
+        f"Application error: {exc.error_code} - {exc.message}",
+        extra={
+            "error_code": exc.error_code,
+            "status_code": exc.status_code,
+            "path": request.url.path,
+            "method": request.method,
+            "body": exc.details,
+        },
+    )
+
     return JSONResponse(
         status_code=exc.status_code,
         content={
@@ -21,6 +37,19 @@ async def app_exception_handler(request: Request, exc: AppException) -> JSONResp
 
 async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Catch-all handler for unexpected exceptions."""
+    logger.error(
+        f"Unhandled exception: {type(exc).__name__}: {str(exc)}",
+        extra={
+            "request_id": getattr(request.state, "request_id", "unknown"),
+            "client": request.client.host if request.client else "unknown",
+            "status_code": 500,
+            "error_code": ErrorCode.INTERNAL_ERROR,
+            "path": request.url.path,
+            "method": request.method,
+            "body": {"traceback": traceback.format_exc()},
+        },
+    )
+
     return JSONResponse(
         status_code=500,
         content={
@@ -38,6 +67,21 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     for error in exc.errors():
         field = ".".join(str(loc) for loc in error["loc"])
         errors.append({"field": field, "message": error["msg"], "type": error["type"]})
+
+    url_path = request.url.path
+
+    logger.warning(
+        f"Validation error on {url_path}",
+        extra={
+            "request_id": getattr(request.state, "request_id", "unknown"),
+            "client": request.client.host if request.client else "unknown",
+            "status_code": 422,
+            "error_code": ErrorCode.VALIDATION_ERROR,
+            "path": url_path,
+            "method": request.method,
+            "body": {"errors": errors},
+        },
+    )
 
     return JSONResponse(
         status_code=422,
