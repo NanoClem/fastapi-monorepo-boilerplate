@@ -18,6 +18,10 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         client = request.client.host if request.client else "unknown"
         req_body = json.loads(await request.body() or "{}")
 
+        request.state.request_id = (
+            request_id  # make it available in routes and exception handlers
+        )
+
         logger.info(
             "Incoming request",
             extra={
