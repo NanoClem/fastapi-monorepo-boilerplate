@@ -1,6 +1,6 @@
 from typing import Any
 
-from ..types import ErrorCode
+from backend.common.types import ErrorCode
 
 
 class AppException(Exception):

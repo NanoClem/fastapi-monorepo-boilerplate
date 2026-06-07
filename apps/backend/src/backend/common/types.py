@@ -7,6 +7,14 @@ class Environment(StrEnum):
     # add more as needed
 
 
+class LogLevel(StrEnum):
+    DEBUG = "DEBUG"
+    INFO = "INFO"
+    WARNING = "WARNING"
+    ERROR = "ERROR"
+    CRITICAL = "CRITICAL"
+
+
 class ErrorCode(StrEnum):
     """Standardized error codes for API responses."""
 

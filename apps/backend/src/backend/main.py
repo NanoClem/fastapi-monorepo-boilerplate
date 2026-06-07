@@ -4,10 +4,11 @@ from typing import AsyncGenerator
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
+from .common.types import Environment
 from .core.config import AppConfig, app_config
+from .core.database import db_manager
 from .core.exceptions import register_exception_handlers
-from .core.types import Environment
-from .logging import setup_logging
+from .core.logging import setup_logging
 from .middlewares import register_middlewares
 from .routes import router as api_router
 
@@ -16,11 +17,12 @@ from .routes import router as api_router
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # On startup
     setup_logging(app_config.ENVIRONMENT)
+    await db_manager.initialize()
 
     yield
 
     # On shutdown
-    # ...
+    await db_manager.close()
 
 
 def create_app(configs: AppConfig, **kwargs) -> FastAPI:
