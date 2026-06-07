@@ -8,7 +8,26 @@ networks:
     driver: bridge
     name: backend_network
 
+volumes:
+  pg_data:
+
 services:
+  postgres:
+    <<: *restart_policy
+    build:
+      context: ./infra/database
+      dockerfile: Dockerfile
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-db}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
   backend:
     <<: *restart_policy
     build:

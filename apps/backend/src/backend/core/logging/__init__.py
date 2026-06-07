@@ -1,8 +1,9 @@
 import logging.config
 from pathlib import Path
 
-from ..core.types import Environment
-from .config import LoggingConfig, logging_config
+from backend.common.types import Environment
+from backend.core.config import LoggingConfig, logging_config
+
 from .log_config import build_log_config
 
 

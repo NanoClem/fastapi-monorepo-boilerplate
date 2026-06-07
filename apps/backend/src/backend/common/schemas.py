@@ -25,15 +25,6 @@ class CustomBaseModel(BaseModel):
         return value.strftime("%Y-%m-%dT%H:%M:%S%z")
 
 
-class PaginatedResponse[T: CustomBaseModel](CustomBaseModel):
-    """Generic pagination response model."""
-
-    total: int
-    page: int
-    size: int
-    items: list[T]
-
-
 class HealthCheckResponse(CustomBaseModel):
     title: str
     version: str
