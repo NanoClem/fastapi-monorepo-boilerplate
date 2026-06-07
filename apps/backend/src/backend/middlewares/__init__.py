@@ -5,7 +5,7 @@ from .config import MiddlewareConfig, middleware_config
 from .log import LoggingMiddleware
 
 
-def setup_middlewares(
+def register_middlewares(
     app: FastAPI, configs: MiddlewareConfig = middleware_config
 ) -> None:
     # Logging

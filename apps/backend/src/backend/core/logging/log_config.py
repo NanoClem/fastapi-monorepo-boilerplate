@@ -1,8 +1,9 @@
 import os
 from typing import Any
 
-from ..core.types import Environment
-from .config import LoggingConfig
+from backend.common.types import Environment
+from backend.core.config import LoggingConfig
+
 from .filters import SensitiveDataFilter
 
 

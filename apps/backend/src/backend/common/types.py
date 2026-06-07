@@ -1,0 +1,33 @@
+from enum import StrEnum
+
+
+class Environment(StrEnum):
+    PRODUCTION = "production"
+    DEVELOPMENT = "development"
+    # add more as needed
+
+
+class LogLevel(StrEnum):
+    DEBUG = "DEBUG"
+    INFO = "INFO"
+    WARNING = "WARNING"
+    ERROR = "ERROR"
+    CRITICAL = "CRITICAL"
+
+
+class ErrorCode(StrEnum):
+    """Standardized error codes for API responses."""
+
+    CONFLICT = "CONFLICT"
+    NOT_FOUND = "NOT_FOUND"
+    NOT_AUTHENTICATED = "NOT_AUTHENTICATED"
+    VALIDATION_ERROR = "VALIDATION_ERROR"
+    INTERNAL_ERROR = "INTERNAL_ERROR"
+    SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE"
+    FORBIDDEN = "FORBIDDEN"
+    BAD_REQUEST = "BAD_REQUEST"
+    TOO_MANY_REQUESTS = "TOO_MANY_REQUESTS"
+    REQUEST_TIMEOUT = "REQUEST_TIMEOUT"
+    GATEWAY_TIMEOUT = "GATEWAY_TIMEOUT"
+    BAD_GATEWAY = "BAD_GATEWAY"
+    METHOD_NOT_ALLOWED = "METHOD_NOT_ALLOWED"

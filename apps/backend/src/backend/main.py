@@ -4,22 +4,25 @@ from typing import AsyncGenerator
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
-from .api import router as api_router
+from .common.types import Environment
 from .core.config import AppConfig, app_config
-from .core.types import Environment
-from .logging import setup_logging
-from .middlewares import setup_middlewares
+from .core.database import db_manager
+from .core.exceptions import register_exception_handlers
+from .core.logging import setup_logging
+from .middlewares import register_middlewares
+from .routes import router as api_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # On startup
     setup_logging(app_config.ENVIRONMENT)
+    await db_manager.initialize()
 
     yield
 
     # On shutdown
-    # ...
+    await db_manager.close()
 
 
 def create_app(configs: AppConfig, **kwargs) -> FastAPI:
@@ -41,7 +44,9 @@ def create_app(configs: AppConfig, **kwargs) -> FastAPI:
     app = FastAPI(lifespan=lifespan, **kwargs)
     app.include_router(api_router)
 
-    setup_middlewares(app)
+    # Register core components
+    register_middlewares(app)
+    register_exception_handlers(app)
 
     if environment != Environment.PRODUCTION:
 

@@ -1,14 +1,12 @@
 from fastapi import APIRouter
 
-from ..core.config import app_config
-from ..core.schemas import HealthCheckResponse
-from .v1 import router as v1_router
+from .common.schemas import HealthCheckResponse
+from .core.config import app_config
 
 router = APIRouter()
-router.include_router(v1_router)
 
 
-@router.get("/healthcheck", include_in_schema=False)
+@router.get("/health", include_in_schema=False)
 async def health_check() -> HealthCheckResponse:
     return HealthCheckResponse(
         title=app_config.APP_NAME,

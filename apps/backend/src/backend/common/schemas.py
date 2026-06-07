@@ -4,8 +4,12 @@ from zoneinfo import ZoneInfo
 
 from pydantic import BaseModel, ConfigDict, field_serializer
 
+from .types import ErrorCode
+
 
 class CustomBaseModel(BaseModel):
+    """Custom Pydantic base model with custom configurations and serializers."""
+
     model_config = ConfigDict(
         populate_by_name=True,
     )
@@ -25,3 +29,10 @@ class HealthCheckResponse(CustomBaseModel):
     title: str
     version: str
     description: str
+
+
+class ErrorResponse(CustomBaseModel):
+    message: str
+    status: int
+    error_code: ErrorCode
+    details: dict[str, Any] | None = None

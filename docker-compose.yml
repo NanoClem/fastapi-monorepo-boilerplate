@@ -1,0 +1,49 @@
+name: fastapi-monorepo
+
+x-restart-policy: &restart_policy
+  restart: unless-stopped
+
+networks:
+  backend:
+    driver: bridge
+    name: backend_network
+
+volumes:
+  pg_data:
+
+services:
+  postgres:
+    <<: *restart_policy
+    build:
+      context: ./infra/database
+      dockerfile: Dockerfile
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-db}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  backend:
+    <<: *restart_policy
+    build:
+      context: .
+      args:
+        PORT: ${BACKEND_PORT:-8000}
+    image: fastapi-monorepo/backend:latest
+    container_name: backend
+    hostname: backend
+    env_file:
+      - ./apps/backend/.env
+    healthcheck:
+      test: "curl -f http://localhost:$$PORT/health || exit 1" # escape $$PORT to reference it at runtime
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
+    networks:
+      - backend
