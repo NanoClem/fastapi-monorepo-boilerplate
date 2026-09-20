@@ -24,14 +24,21 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-db}
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql
     networks:
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   backend:
     <<: *restart_policy
     build:
       context: .
+      dockerfile: ./apps/backend/Dockerfile
       args:
         PORT: ${BACKEND_PORT:-8000}
     image: fastapi-monorepo/backend:latest
@@ -47,3 +54,6 @@ services:
       start_period: 15s
     networks:
       - backend
+    depends_on:
+      postgres:
+        condition: service_healthy
