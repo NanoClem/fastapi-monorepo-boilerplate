@@ -10,7 +10,9 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from .config import DatabaseConfig, app_config, db_config
+from backend.core.config import app_config
+
+from .config import DatabaseConfig, db_config
 
 
 class DatabaseManager:

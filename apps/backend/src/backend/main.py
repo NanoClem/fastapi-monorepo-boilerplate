@@ -6,7 +6,7 @@ from fastapi.responses import RedirectResponse
 
 from .common.types import Environment
 from .core.config import AppConfig, app_config
-from .core.database import db_manager
+from .database.database import db_manager
 from .core.exceptions import register_exception_handlers
 from .core.logging import setup_logging
 from .middlewares import register_middlewares

@@ -1,4 +1,4 @@
-from enum import StrEnum
+from enum import StrEnum, auto
 
 
 class Environment(StrEnum):
@@ -8,26 +8,26 @@ class Environment(StrEnum):
 
 
 class LogLevel(StrEnum):
-    DEBUG = "DEBUG"
-    INFO = "INFO"
-    WARNING = "WARNING"
-    ERROR = "ERROR"
-    CRITICAL = "CRITICAL"
+    DEBUG = auto()
+    INFO = auto()
+    WARNING = auto()
+    ERROR = auto()
+    CRITICAL = auto()
 
 
 class ErrorCode(StrEnum):
     """Standardized error codes for API responses."""
 
-    CONFLICT = "CONFLICT"
-    NOT_FOUND = "NOT_FOUND"
-    NOT_AUTHENTICATED = "NOT_AUTHENTICATED"
-    VALIDATION_ERROR = "VALIDATION_ERROR"
-    INTERNAL_ERROR = "INTERNAL_ERROR"
-    SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE"
-    FORBIDDEN = "FORBIDDEN"
-    BAD_REQUEST = "BAD_REQUEST"
-    TOO_MANY_REQUESTS = "TOO_MANY_REQUESTS"
-    REQUEST_TIMEOUT = "REQUEST_TIMEOUT"
-    GATEWAY_TIMEOUT = "GATEWAY_TIMEOUT"
-    BAD_GATEWAY = "BAD_GATEWAY"
-    METHOD_NOT_ALLOWED = "METHOD_NOT_ALLOWED"
+    CONFLICT = auto()
+    NOT_FOUND = auto()
+    NOT_AUTHENTICATED = auto()
+    VALIDATION_ERROR = auto()
+    INTERNAL_ERROR = auto()
+    SERVICE_UNAVAILABLE = auto()
+    FORBIDDEN = auto()
+    BAD_REQUEST = auto()
+    TOO_MANY_REQUESTS = auto()
+    REQUEST_TIMEOUT = auto()
+    GATEWAY_TIMEOUT = auto()
+    BAD_GATEWAY = auto()
+    METHOD_NOT_ALLOWED = auto()

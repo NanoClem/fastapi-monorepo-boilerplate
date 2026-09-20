@@ -1,9 +1,10 @@
+import uuid
 from datetime import datetime
 
 from sqlalchemy import DateTime, MetaData, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
-from ..core.config import db_config
+from backend.database.config import db_config
 
 
 class Base(DeclarativeBase):
@@ -22,14 +23,19 @@ class AuditBase(Base):
     __abstract__ = True
 
     @declared_attr
-    def id(cls) -> Mapped[str]:
+    def public_id(cls) -> Mapped[str]:
         prefix = getattr(cls, "__prefix__", "obj")
         return mapped_column(
-            primary_key=True,
+            unique=True,
             server_default=text(
                 f"gen_prefixed_id('{prefix}', {db_config.PREFIXED_ID_LENGTH})"
             ),
         )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        primary_key=True,
+        server_default=text("uuidv7()"),
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
