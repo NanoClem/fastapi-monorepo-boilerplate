@@ -19,12 +19,15 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-workspace --package backend
 
-COPY . .
+# Copy required source code only
+COPY apps/backend/pyproject.toml apps/backend/pyproject.toml
+COPY apps/backend/ apps/backend/
+# copy other required local dependencies (packages, ...)
 
 # Install the project itself. 
 # Skipped if source code has not changed.
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --package=backend
+    uv sync --frozen --package backend
 
 FROM python:${PYTHON_VERSION}-slim-trixie
 # It is important to use the image that matches the builder, as the path to the
@@ -45,7 +48,7 @@ RUN apt-get update \
 
 COPY --from=builder --chown=nonroot:nonroot /workspace /workspace
 
-COPY --chown=nonroot:nonroot ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY --chown=nonroot:nonroot apps/backend/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Activate virtual environment by default when the container starts
